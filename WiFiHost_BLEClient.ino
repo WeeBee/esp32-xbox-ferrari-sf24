@@ -3,12 +3,11 @@
 #include <BLEDevice.h>
 #include "arduino_secrets.h"
 
-// --- CONFIGURATION ---
 const char* ssid     = SECRET_SSID;
 const char* password = SECRET_PASSWORD;
 unsigned int localPort = 4210;
 
-// Corrected Data Profiles matching the successful GitHub setup
+// Bburago SL-SF-24 profiles
 static BLEUUID serviceUUID("0000fff0-0000-1000-8000-00805f9b34fb");
 static BLEUUID    charUUID("0000fff1-0000-1000-8000-00805f9b34fb");
 
@@ -127,9 +126,6 @@ void setup() {
 
   udp.begin(localPort);
 
-  // --- NEW AUTOMATED PING-BACK LOGIC ---
-  // The ESP32 will blast its own dynamic identity i times to the network 
-  // so your Python script can catch it instantly without scanning!
   Serial.println("📡 Broadcasting presence to local network...");
   for(int i = 0; i < 30; i++) {
     udp.beginPacket("255.255.255.255", localPort);
@@ -169,8 +165,6 @@ void loop() {
   // Handle incoming UDP network packets
   int packetSize = udp.parsePacket();
   if (packetSize > 0) {
-    // 1. AUTO-DISCOVERY DETECTION:
-    // If the computer sends a 1-byte packet containing '?', reply back instantly!
     if (packetSize == 1) {
       char request;
       udp.read(&request, 1);
@@ -183,9 +177,6 @@ void loop() {
       }
       return;
     }
-
-    // 2. STANDARD DRIVE COMMANDS:
-    // If the packet contains your 4 Xbox control bytes, drive the car
     if (packetSize >= 4) {
       udp.read(packetBuffer, 4);
       sendCarCommand(packetBuffer[0], packetBuffer[1], packetBuffer[2], packetBuffer[3]);
