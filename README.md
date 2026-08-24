@@ -10,5 +10,5 @@ I'm running ESP32 on a protoboard, so its power supply still comes from Micro-US
 Thanks for some people who shared some information about BLE profile in these little machines. I will let a link below.
     2026-08-23, WeeBee
 
-https://github.com/tmk907/RacingCarsController
-https://gist.github.com/scrool/e79d6a4cb50c26499746f4fe473b3768
+- https://github.com/tmk907/RacingCarsController
+- https://gist.github.com/scrool/e79d6a4cb50c26499746f4fe473b3768
